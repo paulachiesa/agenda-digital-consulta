@@ -1,0 +1,7 @@
+.MuiAutocomplete-option {
+    text-align: start!important;
+}
+
+.MuiInputBase-root{
+    height: 50px;
+}

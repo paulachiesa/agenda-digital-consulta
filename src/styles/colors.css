@@ -1,0 +1,8 @@
+:root {
+    --institutionalGreen: rgba(0, 145, 138, 0.725);
+    --borderGrey: rgba(131, 131, 131, 0.37);
+    --buttonGreen: #009e7e;
+    --buttonGreenHover: #00866c;
+    --greyLineHome: rgba(92, 92, 92, 0.342);
+    --textDetail: rgba(42, 42, 42, 0.718)
+}
