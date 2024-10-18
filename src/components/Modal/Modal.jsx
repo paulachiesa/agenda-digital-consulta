@@ -17,14 +17,12 @@ const CustomModal = ({ abrirModal, setAbrirModal, children, tituloModal }) => {
           <div>
             {children}
           </div>
-
-          <br />
-
-          {/* <div className='modalBoxFooter'>
+          {/* <br /> */}
+          <div className='modalBoxFooter'>
             <div className='buttonContainer'>
               <Button textoBoton='Cerrar' onClickFunction={() => setAbrirModal(false)}/>
             </div>
-          </div> */}
+          </div>
 
         </Box>
       </Modal>

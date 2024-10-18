@@ -1,14 +1,35 @@
 .calendar-agenda {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
 .rbc-toolbar-label {
-    font-weight: bold;
-    text-transform: capitalize;
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
 .rbc-header {
-    text-transform: capitalize;
+  text-transform: capitalize;
+}
+
+.rbc-btn-group button {
+  height: 35px;
+}
+
+.MuiSvgIcon-root {
+  display: flex !important;
+}
+
+.rbc-agenda-event-cell:hover {
+  cursor: pointer !important;
+  background-color: whitesmoke !important;
+}
+
+.rbc-day-slot .rbc-event, .rbc-day-slot .rbc-background-event {
+  border: 1px solid black !important;
+}
+
+.rbc-event, .rbc-day-slot .rbc-background-event{
+    background-color: #65A3A0!important;
 }

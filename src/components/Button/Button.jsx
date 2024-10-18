@@ -6,7 +6,8 @@ const Button = ({
   onClickFunction,
   backgroundColor,
   colorText,
-  margin
+  margin, 
+  height
 }) => {
   return (
     //hover D43F3a
@@ -16,7 +17,8 @@ const Button = ({
       style={{
         ...(backgroundColor ? { backgroundColor: backgroundColor } : {}),
         ...(colorText ? { color: colorText } : {}),
-        ...(margin ? {margin: margin } : {})
+        ...(margin ? {margin: margin } : {}),
+        ...(height ? {height: height } : {})
       }}
     >
       {textoBoton}
