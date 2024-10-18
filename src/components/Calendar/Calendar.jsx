@@ -5,24 +5,25 @@ import {
   getDay,
   parse,
   startOfWeek,
-  endOfWeek,
   startOfMonth,
   endOfMonth,
-  startOfDay,
-  endOfDay,
   addDays,
+  endOfWeek,
 } from "date-fns";
 import { es } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./Calendar.css";
 import Modal from "../Modal/Modal";
 import ModalBodyCalendario from "../Modal/ModalBodyCalendario";
-import eventos from "../../assets/eventos";
-import { getAllEventos, getEventoById } from "../../services/Eventos";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { getEventoById } from "../../services/Eventos";
+
 
 const locales = {
   es: es,
 };
+
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -32,8 +33,8 @@ const localizer = dateFnsLocalizer({
 });
 const messages = {
   allDay: "Todo el día",
-  previous: "Anterior",
-  next: "Siguiente",
+  previous: <NavigateBeforeIcon />,
+  next: <NavigateNextIcon />,
   today: "Hoy",
   month: "Mes",
   week: "Semana",
@@ -46,29 +47,23 @@ const messages = {
   showMore: (total) => `+ Ver más (${total})`,
 };
 
-const MyCalendar = () => {
+const MyCalendar = ({ events, onRangeChange, selectedDate }) => {
   const [abrirModal, setAbrirModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [currentRange, setCurrentRange] = useState({
-    start: startOfMonth(new Date()),
-    end: endOfMonth(new Date()),
-  });
-  const [titulo, setTitulo] = useState("");
-  const [idSala, setIdSala] = useState("");
-  const [idGrupo, setIdGrupo] = useState("");
   const [currentView, setCurrentView] = useState(Views.MONTH);
   const defaultView = Views.MONTH;
-  const [events, setEvents] = useState([]);
   const [eventsFinal, setEventsFinal] = useState([]);
-
-  // const getEvento = (id) => {
-  //   getEventoById(id).then((res) => setEvents)
-  // }
 
   useEffect(() => {
     const transformedEvents = events?.map((event) => {
-      const startDate = typeof event.start === 'string' ? new Date(parseInt(event.start.match(/\d+/)[0], 10)) : null;
-      const endDate = typeof event.end === 'string' ? new Date(parseInt(event.end.match(/\d+/)[0], 10)) : null;
+      const startDate =
+        typeof event.start === "string"
+          ? new Date(parseInt(event.start.match(/\d+/)[0], 10))
+          : null;
+      const endDate =
+        typeof event.end === "string"
+          ? new Date(parseInt(event.end.match(/\d+/)[0], 10))
+          : null;
 
       return {
         ...event,
@@ -81,45 +76,34 @@ const MyCalendar = () => {
     setEventsFinal(transformedEvents);
   }, [events]);
 
-  useEffect(() => {
-    getEventos();
-  }, []);
 
-  const getEventos = () => {
-    getAllEventos(
-      currentRange.start,
-      currentRange.end,
-      titulo,
-      idSala,
-      idGrupo
-    ).then((res) => setEvents(res.d.ObjectData));
+  const getEvento = (id) => {
+    getEventoById(id).then((res) => {
+      setSelectedEvent(res);
+      setAbrirModal(true);
+    });
   };
-
-  // console.log("eventos: ", eventsFinal);
-  // console.log("rango de fechas: ", currentRange);
 
   const handleRangeChange = (range, view) => {
-    const actualView = view || currentView;
     // debugger;
+
+    const actualView = view || currentView;
     if (actualView === "month") {
-      setCurrentRange({ start: range.start, end: range.end });
+      onRangeChange({ start: range.start, end: range.end });
     } else if (actualView === "week") {
-      setCurrentRange({ start: range[0], end: range[range.length - 1] });
+      onRangeChange({ start: range[0], end: range[range.length - 1] });
     } else if (actualView === "day") {
       let today = range[0];
-      setCurrentRange({ start: today, end: addDays(today, 1) });
+      onRangeChange({ start: today, end: addDays(today, 1) });
     }
   };
-
-  // console.log("rango actual: ", currentRange);
 
   const handleViewChange = (newView) => {
     setCurrentView(newView);
   };
 
   const handleAbrirModal = (event) => {
-    setAbrirModal(true);
-    setSelectedEvent(event);
+    getEvento(event.Id);
   };
 
   const handleCerrarModal = () => {
@@ -138,7 +122,7 @@ const MyCalendar = () => {
         endAccessor="end"
         defaultView={defaultView}
         views={["month", "week", "day", "agenda"]}
-        style={{ height: 650, width: "80vw", margin: "30px" }}
+        style={{ height: "auto", width: "95vw", margin: "30px" }}
         onSelectEvent={handleAbrirModal}
         onRangeChange={(range, view) => handleRangeChange(range, view)}
         onView={(view) => handleViewChange(view)}

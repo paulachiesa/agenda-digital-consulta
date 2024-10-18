@@ -9,5 +9,6 @@ export default defineConfig({
       changeOrigin: true
     }}
   },
+  base: './',
   plugins: [react()],
 });
