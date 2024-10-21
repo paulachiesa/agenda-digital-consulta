@@ -18,7 +18,7 @@ import ModalBodyCalendario from "../Modal/ModalBodyCalendario";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { getEventoById } from "../../services/Eventos";
-
+import { parseISO } from "date-fns";
 
 const locales = {
   es: es,
@@ -53,6 +53,7 @@ const MyCalendar = ({ events, onRangeChange, selectedDate }) => {
   const [currentView, setCurrentView] = useState(Views.MONTH);
   const defaultView = Views.MONTH;
   const [eventsFinal, setEventsFinal] = useState([]);
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     const transformedEvents = events?.map((event) => {
@@ -76,6 +77,14 @@ const MyCalendar = ({ events, onRangeChange, selectedDate }) => {
     setEventsFinal(transformedEvents);
   }, [events]);
 
+  useEffect(() => {
+    if (selectedDate) {
+      setDate(selectedDate);
+
+      const range = getRangeForCurrentView(selectedDate, currentView);
+      onRangeChange(range);
+    }
+  }, [selectedDate, currentView]);
 
   const getEvento = (id) => {
     getEventoById(id).then((res) => {
@@ -85,7 +94,6 @@ const MyCalendar = ({ events, onRangeChange, selectedDate }) => {
   };
 
   const handleRangeChange = (range, view) => {
-    // debugger;
 
     const actualView = view || currentView;
     if (actualView === "month") {
@@ -110,6 +118,18 @@ const MyCalendar = ({ events, onRangeChange, selectedDate }) => {
     setAbrirModal(false);
     setSelectedEvent(null);
   };
+  
+
+  const getRangeForCurrentView = (date, view) => {
+    if (view === "month") {
+      return { start: startOfMonth(date), end: endOfMonth(date) };
+    } else if (view === "week") {
+      return { start: startOfWeek(date), end: endOfWeek(date) };
+    } else if (view === "day") {
+      return { start: date, end: addDays(date, 1) };
+    }
+    return { start: startOfWeek(date), end: endOfWeek(date) };
+  };
 
   return (
     <div className="calendar-agenda">
@@ -120,12 +140,14 @@ const MyCalendar = ({ events, onRangeChange, selectedDate }) => {
         localizer={localizer}
         startAccessor="start"
         endAccessor="end"
+        date={date}
         defaultView={defaultView}
         views={["month", "week", "day", "agenda"]}
         style={{ height: "auto", width: "95vw", margin: "30px" }}
         onSelectEvent={handleAbrirModal}
         onRangeChange={(range, view) => handleRangeChange(range, view)}
         onView={(view) => handleViewChange(view)}
+        onNavigate={(newDate) => setDate(newDate)}
       />
 
       <Modal

@@ -55,7 +55,8 @@ const Filters = ({ filters, setFilters, onBuscar, onLimpiar, loading }) => {
       setSelectedDate(newValue);
       setFilters((prevFilter) => ({
         ...prevFilter,
-        fechaFiltrar: newValue ? newValue.toDate() : null,
+        // fechaFiltrar: newValue ? new Date(newValue) : null,
+        fechaFiltrar: newValue ? newValue : null,
       }));
     }
   };

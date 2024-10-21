@@ -59,7 +59,6 @@ function App() {
 
 
   const handleEventoEncontrado = (fechaFiltrar, idSala, idGrupo, titulo) => {
-    // debugger
     setLoading(true)
     setFilters((prevFilters) => ({
       ...prevFilters,
